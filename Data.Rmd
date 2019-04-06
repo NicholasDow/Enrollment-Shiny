@@ -1,0 +1,42 @@
+---
+title: "Data"
+author: "Nicholas Dow"
+date: "April 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(readxl)
+library(tidyverse)
+library(janitor)
+Fall_2018 <- read_xlsx("class_enrollment_summary_by_term_10.24.18.xlsx", skip = 2) %>% 
+  na.omit() %>% 
+  filter(Total < 200)
+clean_names(Fall_2018)
+```
+
+#Where is my data from?
+* https://registrar.fas.harvard.edu/faculty-staff/courses/enrollment/archived-course-enrollment-reports
+
+#What is the data
+* The data is of the overall class enrollments for Harvard from year to year.
+
+#What do I plan to do with it
+* I plan to combine all the data sets through a join funciton and follow the enrollment in large classes over time
+
+```{r echo= FALSE, message= FALSE, warning= FALSE}
+
+
+Fall_2018 %>% 
+  ggplot(aes(Total)) +
+  geom_histogram(binwidth = 5) +
+  scale_y_log10()+ 
+  labs(
+    title = "Histogram of Class Size in Fall 2018, excluding large classes",
+    subtitle = "Small Class enrollment is a log relative to 0",
+    caption = "Source: FAS Registars Office"
+  ) +
+  ylab("Number of Classes") +
+  xlab("Class Sizes") 
+```
+
